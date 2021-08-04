@@ -27,7 +27,8 @@ def field_list(describe_table_text):
         field_name = line[0:separators[0]]
         nullable = line[separators[0]+1:separators[1]]
         field_type = line[separators[1]+1:]
-        result.append((field_name, nullable, field_type))
+        if field_name:
+            result.append((field_name, nullable, field_type))
     return result
 
 
@@ -36,11 +37,11 @@ def to_java_type(oracle_type_str):
         if re.match(reg_ex, oracle_type_str):
             return import_stmt, java_type
     raise Exception(
-        f"Could not find a matching java type for oracle type '{oracle_type_str}")
+        f"Could not find a matching java type for oracle type '{oracle_type_str}'")
 
 
 def convert_to_pojo(describe_table_text, class_name):
-    oracle_field_list = field_list(describe_table_text)
+    oracle_field_list = field_list(describe_table_text)    
     java_field_list = [
         (
             underscore_2_camel_case(
