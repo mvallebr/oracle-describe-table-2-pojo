@@ -1,6 +1,11 @@
 
 import os
 
+TYPE_MAP = {
+    "TIMESTAMP": ("import java.time.LocalDateTime", "LocalDateTime"),
+    "VARCHAR2": ("", "String"),
+    "NUMBER": ("", "Long"),
+}
 
 def underscore_2_camel_case(underscore_file_name):
     return ''.join(x.capitalize() or '_' for x in underscore_file_name.split('_'))
