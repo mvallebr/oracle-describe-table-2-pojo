@@ -7,9 +7,7 @@ TMP_FOLDER = os.path.join(os.path.dirname(__file__), "tmp")
 os.makedirs(TMP_FOLDER)
 
 test_data = [
-    ("usage_writers.txt",   False, "UsageWriters.java"),
-    ("usage_chain_steps.txt",  False, "UsageChainSteps.java"),
-    ("usage_writer_chains.txt",  False, "UsageWriterChains.java"),
+    ("test_table.txt",   False, "TestTable.java"), 
 ]
 
 

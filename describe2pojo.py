@@ -1,19 +1,25 @@
 
 import os
+import re
 
 TYPE_MAP = {
-    "TIMESTAMP": ("import java.time.LocalDateTime", "LocalDateTime"),
-    "VARCHAR2": ("", "String"),
-    "NUMBER": ("", "Long"),
+    r"TIMESTAMP.*": ("import java.time.LocalDateTime", "LocalDateTime"),
+    r"VARCHAR2.*": ("import java.lang.String", "String"),
+    r"NUMBER\s*\(\d+\)": ("import java.lang.Long", "Long"),
+    r"NUMBER\s*\(\d+,\d+\)": ("import java.lang.Float", "Float"),
 }
 
-def underscore_2_camel_case(underscore_file_name):
-    return ''.join(x.capitalize() or '_' for x in underscore_file_name.split('_'))
+
+def underscore_2_camel_case(underscore_file_name, first_lower=False):
+    return ''.join(
+        (x.capitalize() if i != 0 or not first_lower else x)
+        or '_'
+        for i, x in enumerate(underscore_file_name.split('_'))
+    )
 
 
 def field_list(describe_table_text):
     lines = describe_table_text.split("\n")
-    col_names = lines[0].split()
     separators = [lines[1].find(" ")]
     separators.append(lines[1].find(" ", separators[-1]+1))
     result = []
@@ -25,9 +31,35 @@ def field_list(describe_table_text):
     return result
 
 
-def convert_to_pojo(describe_table_text, class_name):
-    return f"""public class {class_name} {{
+def to_java_type(oracle_type_str):
+    for reg_ex, (import_stmt, java_type) in TYPE_MAP.items():
+        if re.match(reg_ex, oracle_type_str):
+            return import_stmt, java_type
+    raise Exception(
+        f"Could not find a matching java type for oracle type '{oracle_type_str}")
 
+
+def convert_to_pojo(describe_table_text, class_name):
+    oracle_field_list = field_list(describe_table_text)
+    java_field_list = [
+        (
+            underscore_2_camel_case(
+                field_name.lower(), first_lower=True
+            ).strip(),
+            to_java_type(oracle_type)
+        )
+        for field_name, _, oracle_type in oracle_field_list
+    ]
+    import_list = "\n".join(
+        sorted(set([f"{import_stmt};" for (_, (import_stmt, _)) in java_field_list])))
+    java_field_list_declarations = "\n".join([f"    private {java_type} {field_name};" for (
+        field_name, (_, java_type)) in java_field_list])
+
+    return f"""
+{import_list}
+
+public class {class_name} {{
+{java_field_list_declarations}
 }}
 """
 
