@@ -1,0 +1,7 @@
+version: '3'
+services:
+  tests:
+    build:
+      context: .
+    environment:
+      - PYTHONPATH=/code

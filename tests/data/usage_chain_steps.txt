@@ -1,0 +1,8 @@
+Name                    Null?    Type              
+----------------------- -------- ----------------- 
+ID                      NOT NULL VARCHAR2(20 CHAR) 
+USAGE_FILE_CLAIM_RUN_ID NOT NULL VARCHAR2(20 CHAR) 
+USAGE_CHAIN_ID          NOT NULL VARCHAR2(20 CHAR) 
+RIGHT_ID                NOT NULL VARCHAR2(20 CHAR) 
+RIGHT_DATE_ID                    VARCHAR2(20 CHAR) 
+STEP_SEQUENCE           NOT NULL NUMBER(2)    
