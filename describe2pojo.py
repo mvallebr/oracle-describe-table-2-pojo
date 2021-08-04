@@ -96,4 +96,4 @@ def main(input_file_name, output_folder, overwrite):
 
 if __name__ == '__main__':
     args = parse_arguments()
-    main(args.input_file_name, args.output_file_name, args.overwrite)
+    main(args.input_file_name, args.output_folder, args.overwrite)
