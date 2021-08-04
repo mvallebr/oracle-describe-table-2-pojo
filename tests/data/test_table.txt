@@ -1,0 +1,8 @@
+Name                           Null?    Type              
+------------------------------ -------- ----------------- 
+ID                             NOT NULL VARCHAR2(20 CHAR) 
+FIELD_VARCHAR1                 NOT NULL VARCHAR2(1 CHAR)  
+FIELD_NUMBER2                           NUMBER(6,3)       
+FIELD_NUMBER3                           NUMBER(6)       
+FIELD_TIMESTAMP4               NOT NULL TIMESTAMP(6)      
+FIELD_VARCHAR5                 NOT NULL VARCHAR2(30 CHAR)
